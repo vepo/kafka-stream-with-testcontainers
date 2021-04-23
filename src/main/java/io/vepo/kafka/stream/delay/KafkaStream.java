@@ -18,6 +18,7 @@ import org.apache.kafka.streams.state.KeyValueStore;
 
 public class KafkaStream implements Closeable {
 
+    private static final String applicationId = "wordcount-application";
     private final String outputTopic = "WordsWithCountsTopic";
     private final String inputTopic = "TextLinesTopic";
     private final KafkaStreams streams;
@@ -27,7 +28,7 @@ public class KafkaStream implements Closeable {
         latch = new CountDownLatch(1);
 
         Properties props = new Properties();
-        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "wordcount-application");
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, applicationId);
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
@@ -56,6 +57,7 @@ public class KafkaStream implements Closeable {
                 latch.countDown();
             }
         });
+
     }
 
     public void start() {
@@ -73,6 +75,10 @@ public class KafkaStream implements Closeable {
 
     public String outputTopic() {
         return outputTopic;
+    }
+    
+    public static String applicationId() {
+        return applicationId;
     }
 
     @Override
